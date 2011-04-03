@@ -1,26 +1,26 @@
 <?php
-class KarlemoRedir {
+class OmnicoreRedir {
 
-		var $adminOptionsName = "KarlemoRedirAdminOptions";
+		var $adminOptionsName = "OmnicoreRedirAdminOptions";
 		
-		function KarlemoRedir(){
+		function OmnicoreRedir(){
 		
 		}
 		
 		function init(){
 			global $wpdb,$isCookieSet;
 			if (isset($_REQUEST['token'])){
-				$sql = "SELECT deleted FROM ".$wpdb->prefix."KarlemoRedir WHERE ID='" . $_REQUEST['token'] . "'";
+				$sql = "SELECT deleted FROM ".$wpdb->prefix."OmnicoreRedir WHERE ID='" . $_REQUEST['token'] . "'";
 				$deleted = $wpdb->get_var($sql);
 				
 				if ($deleted!=1){
-					setcookie("KarLeMoRedir",$_REQUEST['token'],time()+3600*24*30);
+					setcookie("OmnicoreRedir",$_REQUEST['token'],time()+3600*24*30);
 					$this->DeleteToken($_REQUEST['token']);
 					$isCookieSet=true;
 				}
 			}
 			if (isset($_REQUEST['deletecookie'])){
-				setcookie("KarLeMoRedir","",time() - 3600);
+				setcookie("OmnicoreRedir","",time() - 3600);
 			}
 		}
 		
@@ -31,16 +31,16 @@ class KarlemoRedir {
 		
 		//Returns an array of admin options
 		function getAdminOptions(){
-			$KarlemoRedirOptions = array('token_url' => 'http://',
+			$OmnicoreRedirOptions = array('token_url' => 'http://',
 				'secondary_url' => 'http://'
 				);
 			$devOptions = get_option($this->adminOptionsName);
 			if (!empty($devOptions)){
 				foreach($devOptions as $key => $option)
-					$KarlemoRedirOptions[$key]=$option;
+					$OmnicoreRedirOptions[$key]=$option;
 			}
-				update_option($this->adminOptionsName,$KarlemoRedirOptions);
-				return $KarlemoRedirOptions;
+				update_option($this->adminOptionsName,$OmnicoreRedirOptions);
+				return $OmnicoreRedirOptions;
 		}	
 		
 		function deactivate(){
@@ -50,7 +50,7 @@ class KarlemoRedir {
 		function createTables(){
 			global $wpdb;
 			
-			$table = $wpdb->prefix."KarlemoRedir";
+			$table = $wpdb->prefix."OmnicoreRedir";
 			$structure = "CREATE TABLE IF NOT EXISTS $table (
 			id varchar(13),
 			deleted int(1)
@@ -61,7 +61,7 @@ class KarlemoRedir {
 		function removeTables(){
 			global $wpdb;
 			
-			$table = $wpdb->prefix."KarlemoRedir";
+			$table = $wpdb->prefix."OmnicoreRedir";
 			$structure = "DROP TABLE IF EXISTS $table";
 			$wpdb->query($structure);	
 		}
@@ -79,16 +79,16 @@ class KarlemoRedir {
 					}
 				}
 			}
-			if (isset($_POST['update_KarlemoRedirSettings'])){
-				if (isset($_POST['KarlemoRedirTokenUrl'])){
-					$devOptions['token_url'] = $_POST['KarlemoRedirTokenUrl'];
+			if (isset($_POST['update_OmnicoreRedirSettings'])){
+				if (isset($_POST['OmnicoreRedirTokenUrl'])){
+					$devOptions['token_url'] = $_POST['OmnicoreRedirTokenUrl'];
 				}		
-				if (isset($_POST['KarlemoRedirSecondaryUrl'])){
-					$devOptions['secondary_url'] = $_POST['KarlemoRedirSecondaryUrl'];
+				if (isset($_POST['OmnicoreRedirSecondaryUrl'])){
+					$devOptions['secondary_url'] = $_POST['OmnicoreRedirSecondaryUrl'];
 				}	
 				update_option($this->adminOptionsName,$devOptions);
 				?>
-<div class="updated"><p><strong><?php _e("Inställningarna uppdaterades.",'KarlemoRedir');?></strong></p></div>
+<div class="updated"><p><strong><?php _e("Inställningarna uppdaterades.",'OmnicoreRedir');?></strong></p></div>
 				<?php
 			}			
 			if (!array_key_exists('token_url',$devOptions)){
@@ -100,22 +100,22 @@ class KarlemoRedir {
 			?>
 			<div class=wrap>
 			<form method="post" action="<?php echo($_SERVER["REQUEST_URI"]); ?>">
-			<h2><?php _e("KarLeMo Redirect administration",'KarlemoRedir');?></h2>
-			<h3><?php _e("Token inställningar.",'KarlemoRedir');?></h3>
+			<h2><?php _e("Omnicore Redirect administration",'OmnicoreRedir');?></h2>
+			<h3><?php _e("Token inställningar.",'OmnicoreRedir');?></h3>
 			<table class="form-table">
 			<tr valign="top">
 			<th scope="row">
-			<label for="KarlemoRedirTokenUrl"><?php _e("Token url",'KarlemoRedir');?></label>
-			<td><input type="text" name="KarlemoRedirTokenUrl" value="<?php echo($devOptions['token_url']);?>">
+			<label for="OmnicoreRedirTokenUrl"><?php _e("Token url",'OmnicoreRedir');?></label>
+			<td><input type="text" name="OmnicoreRedirTokenUrl" value="<?php echo($devOptions['token_url']);?>">
 			</td></tr>
 			<tr valign="top">
 			<th scope="row">
-			<label for="KarlemoRedirSecondaryUrl"><?php _e("Sekundär URL",'KarlemoRedir');?></label>
-			<td><input type="text" name="KarlemoRedirSecondaryUrl" value="<?php echo($devOptions['secondary_url']);?>">
+			<label for="OmnicoreRedirSecondaryUrl"><?php _e("Sekundär URL",'OmnicoreRedir');?></label>
+			<td><input type="text" name="OmnicoreRedirSecondaryUrl" value="<?php echo($devOptions['secondary_url']);?>">
 			</td></tr>						
 			</table>
 			<div class="submit">
-			<input type="submit" name="update_KarlemoRedirSettings" value="<?php _e('Uppdatera inställningar','KarlemoRedir');?>"/></div>
+			<input type="submit" name="update_OmnicoreRedirSettings" value="<?php _e('Uppdatera inställningar','OmnicoreRedir');?>"/></div>
 			</form>
 			<?php
 				echo($this->ListTokens());
@@ -129,17 +129,17 @@ class KarlemoRedir {
 			$devOptions = $this->getAdminOptions();
 			if (isset($_REQUEST['token'])){
 				
-				$sql = "SELECT deleted FROM ".$wpdb->prefix."KarlemoRedir WHERE ID='" . $_REQUEST['token'] . "'";
+				$sql = "SELECT deleted FROM ".$wpdb->prefix."OmnicoreRedir WHERE ID='" . $_REQUEST['token'] . "'";
 				$deleted = $wpdb->get_var($sql);
 				
-				if (($isCookieSet==false)&&($deleted==1||($deleted==2&&$_COOKIE["KarLeMoRedir"]==""))){
+				if (($isCookieSet==false)&&($deleted==1||($deleted==2&&$_COOKIE["OmnicoreRedir"]==""))){
 					echo("<meta HTTP-EQUIV=\"REFRESH\" content=\"0; url=" . $devOptions['secondary_url'] . "\">");
 					die();
 				}else{
 					//echo("<meta HTTP-EQUIV=\"REFRESH\" content=\"0; url=" . $devOptions['token_url'] . "\">");
 				}
-			}elseif (isset($_COOKIE["KarLeMoRedir"])&&$_COOKIE["KarLeMoRedir"]!=""){
-				$sql = "SELECT deleted FROM ".$wpdb->prefix."KarlemoRedir WHERE ID='" . $_COOKIE["KarLeMoRedir"] . "'";
+			}elseif (isset($_COOKIE["OmnicoreRedir"])&&$_COOKIE["OmnicoreRedir"]!=""){
+				$sql = "SELECT deleted FROM ".$wpdb->prefix."OmnicoreRedir WHERE ID='" . $_COOKIE["OmnicoreRedir"] . "'";
 				$deleted = $wpdb->get_var($sql);
 				if ($deleted==1){
 					echo("<meta HTTP-EQUIV=\"REFRESH\" content=\"0; url=" . $devOptions['secondary_url'] . "\">"
@@ -161,7 +161,7 @@ class KarlemoRedir {
 		
 		function ListTokens(){
 			global $wpdb;
-			$sql = "SELECT * FROM ".$wpdb->prefix."KarlemoRedir";
+			$sql = "SELECT * FROM ".$wpdb->prefix."OmnicoreRedir";
 			$tokens = $wpdb->get_results($sql);
 			$return="<TABLE><tr><td>Token</td><td>Använd</td><td>Raderad</td><td>Radera</td></tr>";
 			foreach($tokens as $token){
@@ -173,25 +173,25 @@ class KarlemoRedir {
 		}
 		function CreateToken(){
 			global $wpdb;
-			$structure = "INSERT INTO ".$wpdb->prefix."KarlemoRedir (id) VALUES ('" . uniqid() . "')";
+			$structure = "INSERT INTO ".$wpdb->prefix."OmnicoreRedir (id) VALUES ('" . uniqid() . "')";
 			$wpdb->query($structure);	
 		}
 		function DeleteToken($id,$delete=false){
 			global $wpdb;
 			$deleted=($delete==false?2:1);
-			$structure = "UPDATE ".$wpdb->prefix."KarlemoRedir SET deleted=$deleted WHERE id='$id'";
+			$structure = "UPDATE ".$wpdb->prefix."OmnicoreRedir SET deleted=$deleted WHERE id='$id'";
 			$wpdb->query($structure);	
 			
 		}
 		
-		function KarlemoRedir_ap(){
-			global $dl_pluginKarlemoRedir;
+		function OmnicoreRedir_ap(){
+			global $dl_pluginOmnicoreRedir;
 			
-			if (!isset($dl_pluginKarlemoRedir)){
+			if (!isset($dl_pluginOmnicoreRedir)){
 				return;
 			}
 			if (function_exists('add_options_page')){
-				add_options_page('KarLeMo Redir','KarLeMo Redir',9,'printAdminPage',array(&$dl_pluginKarlemoRedir,'printAdminPage'));
+				add_options_page('Omnicore Redir','Omnicore Redir',9,'printAdminPage',array(&$dl_pluginOmnicoreRedir,'printAdminPage'));
 			}
 		}
 }
